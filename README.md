@@ -1,0 +1,1 @@
+# ScalpNote-Frontend
