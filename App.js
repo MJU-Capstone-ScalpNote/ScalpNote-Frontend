@@ -13,6 +13,8 @@ import TestHomeScreen from "./screens/TestHomeScreen";
 import CameraScreen from "./screens/CameraScreen";
 import CommunityScreen from "./screens/CommunityScreen";
 import CommunityHeader from "./components/CommunityHeader";
+import Footer from "./components/Footer";
+import MyPageNotLogined from "./components/MyPageNotLogined";
 
 const Stack = createStackNavigator();
 
@@ -51,11 +53,13 @@ export default function App() {
             component={CommunityScreen}
             options={{ title: "커뮤니티" }}
           />
+          <Stack.Screen name="CommunityHeader" component={CommunityHeader} />
           <Stack.Screen
-            name="CommunityHeader"
-            component={CommunityHeader}
-            // options={{ title: "커뮤니티 헤더" }}
+            name="MyPageNotLogined"
+            component={MyPageNotLogined}
+            options={{ title: "마이페이지" }}
           />
+          <Stack.Screen name="Footer" component={Footer} />
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
