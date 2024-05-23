@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import {
@@ -8,7 +8,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Button,
+  Image,
 } from "react-native";
+import Footer from "../components/Footer";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -29,6 +31,10 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.testContainer}>
+        <Image
+          source={require("../assets/images/Logo.png")}
+          style={styles.image}
+        />
         <TouchableOpacity style={styles.testButton} onPress={handleStartTest}>
           <Text style={styles.testButtonText}>두피 진단 시작</Text>
         </TouchableOpacity>
@@ -44,6 +50,7 @@ const HomeScreen = () => {
           <Button title="회원가입" onPress={handleSignUp} />
         </View>
       </View>
+      <Footer />
     </View>
   );
 };
@@ -53,6 +60,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     width: "100%",
+    backgroundColor: "white",
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginBottom: 30,
   },
   testContainer: {
     flex: 1,
