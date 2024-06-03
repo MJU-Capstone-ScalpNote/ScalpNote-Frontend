@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import Footer from "../components/Footer";
 
 import {
   View,
@@ -17,48 +19,49 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
-  //   const handleSignUp = () => {
-  //     navigation.navigate("SignUp");
-  //   };
+  const handleSignUp = () => {
+    navigation.navigate("SignUp");
+  };
 
   const handleLogin = async () => {
     try {
+      if (email.trim() === "") {
+        alert("이메일을 입력해주세요.");
+        return;
+      } else if (password.trim() === "") {
+        alert("비밀번호를 입력해주세요.");
+        return;
+      }
+      console.log("email: ", email);
+      console.log("pw: ", password);
+
       const response = await axios.post(
         "http://13.209.76.135:8080/auth/sign-in",
         { email, password }
       );
-      console.log("로그인 성공");
-      console.log(response.data);
-      alert("로그인 되었습니다.");
 
-      navigation.navigate("home");
-    } catch (error) {
-      console.error(error);
-      alert("로그인 중 오류가 발생했습니다.");
-    }
-  };
+      if (response.data !== "" && response.data !== null) {
+        console.log("로그인 성공");
+        console.log(response.data);
+        alert("로그인 되었습니다.");
 
-  const handleSignUp = async () => {
-    try {
-      const response = await axios.post(
-        "http://13.209.76.135:8080/auth/sign-up",
-        {
-          name,
-          email,
-          password,
+        const { accessToken } = response.data.data;
+        if (accessToken !== null && accessToken !== undefined) {
+          // AsyncStorage에 저장
+          await AsyncStorage.setItem("userToken", accessToken);
+          navigation.navigate("Home");
+        } else {
+          // 오류 처리
+          console.error("Invalid token: ", accessToken);
         }
-      );
-      // 성공적으로 요청이 완료되면 실행될 로직 (예: 화면 전환, 알림 표시 등)
-      console.log(response.data); // 응답 데이터 로깅
-      alert("회원가입이 완료되었습니다.");
-      // 상태 초기화
-      setName("");
+
+        navigation.navigate("Home");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("이메일과 비밀번호를 다시 입력해주세요.");
       setEmail("");
       setPassword("");
-    } catch (error) {
-      // 에러 처리 로직
-      console.error(error);
-      alert("회원가입 중 오류가 발생했습니다.");
     }
   };
 
@@ -82,7 +85,9 @@ const LoginScreen = () => {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>로그인</Text>
       </TouchableOpacity>
-      <Button title="계정이 없으신가요?" onPress={handleSignUp} />
+      <TouchableOpacity>
+        <Text onPress={handleSignUp}>계정이 없으신가요?</Text>
+      </TouchableOpacity>
     </View>
   );
 };
