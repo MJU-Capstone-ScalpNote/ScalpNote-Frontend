@@ -1,5 +1,5 @@
 import { Camera, CameraType } from "expo-camera/legacy";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Button,
   StyleSheet,
@@ -10,7 +10,6 @@ import {
   Alert,
 } from "react-native";
 import Slider from "@react-native-community/slider";
-import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import { useNavigation } from "@react-navigation/native";
 
@@ -25,34 +24,47 @@ const CameraTestScreen = () => {
     MediaLibrary.usePermissions();
   const navigation = useNavigation();
 
-  if (!permission) {
-    return <View />;
-  }
+  useEffect(() => {
+    if (!permission || !mediaPermission) {
+      return;
+    }
 
-  if (!permission.granted) {
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
-          카메라를 사용하기 위해서 권한이 필요합니다.
-        </Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
+    if (!permission.granted) {
+      Alert.alert(
+        "권한 필요",
+        "카메라를 사용하기 위해서 권한이 필요합니다.",
+        [
+          {
+            text: "권한 허용",
+            onPress: requestPermission,
+          },
+        ],
+        { cancelable: false }
+      );
+    }
 
-  if (!mediaPermission) {
-    return <View />;
-  }
+    if (!mediaPermission.granted) {
+      Alert.alert(
+        "권한 필요",
+        "갤러리에 저장하기 위해서 권한이 필요합니다.",
+        [
+          {
+            text: "권한 허용",
+            onPress: requestMediaPermission,
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+  }, [permission, mediaPermission]);
 
-  if (!mediaPermission.granted) {
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
-          갤러리에 저장하기 위해서 권한이 필요합니다.
-        </Text>
-        <Button onPress={requestMediaPermission} title="grant permission" />
-      </View>
-    );
+  if (
+    !permission ||
+    !mediaPermission ||
+    !permission.granted ||
+    !mediaPermission.granted
+  ) {
+    return <View style={styles.container} />;
   }
 
   function toggleCameraType() {
@@ -65,7 +77,7 @@ const CameraTestScreen = () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
       setPhotoUri(photo.uri);
-      setIsPhotoSaved(false); // 새로운 사진을 찍었을 때 저장 여부 초기화
+      setIsPhotoSaved(false);
     }
   };
 
@@ -74,7 +86,7 @@ const CameraTestScreen = () => {
       try {
         const asset = await MediaLibrary.createAssetAsync(photoUri);
         await MediaLibrary.createAlbumAsync("ExpoPhotos", asset, false);
-        setIsPhotoSaved(true); // 사진이 저장되었음을 표시
+        setIsPhotoSaved(true);
         Alert.alert("사진이 갤러리에 저장되었습니다!");
       } catch (error) {
         Alert.alert("사진 저장에 실패했습니다.", error.message);
@@ -133,7 +145,7 @@ const CameraTestScreen = () => {
           type={type}
           zoom={zoom}
           ref={cameraRef}
-          autoFocus={Camera.Constants.AutoFocus.on} // 자동 초점 활성화
+          autoFocus={Camera.Constants.AutoFocus.on}
         >
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -178,6 +190,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+  },
+  permissionContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  permissionText: {
+    fontSize: 18,
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
+  },
+  permissionButton: {
+    backgroundColor: "rgb(127, 170, 255)",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+  },
+  permissionButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   camera: {
     flex: 1,
