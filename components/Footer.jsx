@@ -34,26 +34,6 @@ const Footer = () => {
     navigation.navigate("MyPage");
   };
 
-  //   const handleMyPage = () => {
-  //     if (!isLoggined) {
-  //       Alert.alert(
-  //         "로그인 필요", // 알림 제목
-  //         "마이페이지를 이용하려면 로그인이 필요합니다.", // 알림 메시지
-  //         [
-  //           { text: "로그인하기", onPress: GoLogin },
-  //           {
-  //             text: "취소",
-  //             onPress: () => console.log("로그인 취소"),
-  //             style: "cancel",
-  //           },
-  //         ],
-  //         { cancelable: false }
-  //       );
-  //     } else {
-  //       navigation.navigate("MyPage");
-  //     }
-  //   };
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={GoHome}>
@@ -94,12 +74,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: windowWidth,
     height: 80,
-    backgroundColor: "white",
+    backgroundColor: "rgb(127, 170, 255)",
     paddingLeft: 30,
     paddingRight: 25,
     paddingBottom: 10,
-    borderTopColor: "gray",
-    borderTopWidth: 1,
   },
   footer: {
     backgroundColor: "black",
@@ -121,3 +99,23 @@ const styles = StyleSheet.create({
     height: 45,
   },
 });
+
+//   const handleMyPage = () => {
+//     if (!isLoggined) {
+//       Alert.alert(
+//         "로그인 필요", // 알림 제목
+//         "마이페이지를 이용하려면 로그인이 필요합니다.", // 알림 메시지
+//         [
+//           { text: "로그인하기", onPress: GoLogin },
+//           {
+//             text: "취소",
+//             onPress: () => console.log("로그인 취소"),
+//             style: "cancel",
+//           },
+//         ],
+//         { cancelable: false }
+//       );
+//     } else {
+//       navigation.navigate("MyPage");
+//     }
+//   };
