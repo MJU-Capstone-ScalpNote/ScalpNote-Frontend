@@ -1,57 +1,28 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from "react-native";
+import axios from "axios";
 import CommunityHeader from "../components/CommunityHeader";
 import { useNavigation } from "@react-navigation/native";
 
 const CommunityScreen = () => {
+  const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const navigation = useNavigation();
 
-  const dummyPosts = [
-    {
-      id: "1",
-      title: "뚝딱 베이비 하윤이를 소개합니다.",
-      content: "뚝딱 앱에 들어오실 때 말똥말똥 매력...",
-      date: "2일 전",
-      author: "운영자",
-      likes: 14,
-      comments: 20,
-    },
-    {
-      id: "2",
-      title: "오늘 아침 8시 즈음 자동 결제된 거 취소 환불 가능한가요?",
-      content: "혹시 이미 결제되어 환불은 불가능한가요? ㅠㅠ",
-      date: "방금",
-      author: "o1806xua",
-      likes: 0,
-      comments: 0,
-    },
-    {
-      id: "3",
-      title: "자동결제가 되어서 깜짝 놀랐네요",
-      content: "뚝딱 사용하지 않았어요 환불해 주세요",
-      date: "방금",
-      author: "bhb8492w",
-      likes: 0,
-      comments: 0,
-    },
-    {
-      id: "4",
-      title: "자동결제 취소 환불해주세요",
-      content: "",
-      date: "32분 전",
-      author: "l91y67qc",
-      likes: 0,
-      comments: 0,
-    },
-  ];
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get("http://43.201.108.238:8080/boards", {
+        params: { page: 0, size: 10, sort: "createdAt,desc" },
+      });
+      setPosts(response.data.data.content);
+    } catch (error) {
+      console.error("Error fetching posts", error);
+    }
+  };
 
   const renderPost = ({ item }) => (
     <TouchableOpacity onPress={() => setSelectedPost(item)}>
@@ -60,12 +31,8 @@ const CommunityScreen = () => {
         <Text style={styles.postContent}>{item.content}</Text>
         <View style={styles.postFooter}>
           <Text style={styles.postAuthor}>
-            {item.author} · {item.date}
+            {item.writer} · {new Date(item.createdAt).toLocaleString()}
           </Text>
-          <View style={styles.postStats}>
-            <Text style={styles.postStat}>좋아요 {item.likes}</Text>
-            <Text style={styles.postStat}>댓글 {item.comments}</Text>
-          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -81,25 +48,28 @@ const CommunityScreen = () => {
           </TouchableOpacity>
           <Text style={styles.postDetailTitle}>{selectedPost.title}</Text>
           <Text style={styles.postDetailContent}>{selectedPost.content}</Text>
+          {selectedPost.imageUrl && (
+            <>
+              <Text>{selectedPost.imageUrl}</Text> {/* 이미지 URL 로그 출력 */}
+              <Image
+                source={{ uri: encodeURI(selectedPost.imageUrl) }} // URL 인코딩
+                style={styles.postDetailImage}
+                onError={(e) => console.error(e.nativeEvent.error)} // 이미지 로딩 에러 로그 출력
+              />
+            </>
+          )}
           <Text style={styles.postDetailAuthor}>
-            {selectedPost.author} · {selectedPost.date}
+            {selectedPost.writer} · {new Date(selectedPost.createdAt).toLocaleString()}
           </Text>
         </View>
       ) : (
-        <FlatList
-          data={dummyPosts}
-          renderItem={renderPost}
-          keyExtractor={(item) => item.id}
-        />
+        <FlatList data={posts} renderItem={renderPost} keyExtractor={(item) => item.postId.toString()} />
       )}
-      <TouchableOpacity
-        style={styles.writeButton}
-        onPress={() => navigation.navigate("WritePost")}
-      >
+      <TouchableOpacity style={styles.writeButton} onPress={() => navigation.navigate("WritePost")}>
         <Image
           source={{
             uri: "https://cdn-icons-png.flaticon.com/512/1828/1828911.png",
-          }} // 아이콘 URL
+          }}
           style={styles.writeButtonImage}
         />
       </TouchableOpacity>
@@ -136,14 +106,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#888",
   },
-  postStats: {
-    flexDirection: "row",
-  },
-  postStat: {
-    fontSize: 12,
-    color: "#888",
-    marginLeft: 10,
-  },
   postDetailContainer: {
     flex: 1,
     padding: 15,
@@ -165,6 +127,12 @@ const styles = StyleSheet.create({
   postDetailAuthor: {
     fontSize: 14,
     color: "#888",
+  },
+  postDetailImage: {
+    width: "100%",
+    height: 200,
+    resizeMode: "contain",
+    marginVertical: 10,
   },
   writeButton: {
     position: "absolute",

@@ -10,7 +10,7 @@ const TestHomeScreen = () => {
     navigation.navigate("CameraTestScreen");
   };
   const handleGallery = () => {
-    navigation.navigate("Gallery");
+    navigation.navigate("GalleryScreen"); // Consistent naming
   };
 
   return (
