@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 500,
+    height: 500,
     marginBottom: 30,
   },
   testContainer: {

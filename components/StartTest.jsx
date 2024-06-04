@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-
 import {
   Image,
   Button,
@@ -16,6 +15,7 @@ const StartTest = () => {
   const handleStartTest = () => {
     navigation.navigate("TestHomeScreen");
   };
+
   return (
     <View>
       <TouchableOpacity style={styles.testButton} onPress={handleStartTest}>
@@ -33,19 +33,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   testButton: {
-    backgroundColor: "#007AFF",
-    color: "white",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    backgroundColor: "rgb(107, 156, 255)",
+    padding: 15,
+    paddingBottom: 20,
+    borderRadius: 12,
     margin: 10,
     width: 200,
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   testButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
 });
