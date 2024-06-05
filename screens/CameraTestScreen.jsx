@@ -17,7 +17,7 @@ const CameraTestScreen = () => {
   const [type, setType] = useState(CameraType.back);
   const [zoom, setZoom] = useState(0);
   const [photoUri, setPhotoUri] = useState(null);
-  const [isPhotoSaved, setIsPhotoSaved] = useState(false); // 이미지 저장 여부 상태 추가
+  const [isPhotoSaved, setIsPhotoSaved] = useState(false);
   const cameraRef = useRef(null);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [mediaPermission, requestMediaPermission] =
@@ -126,17 +126,37 @@ const CameraTestScreen = () => {
         <View style={styles.previewContainer}>
           <Image source={{ uri: photoUri }} style={styles.preview} />
           <View style={styles.buttonRow}>
-            <Button
-              style={styles.buttons}
-              title="다시찍기"
+            <TouchableOpacity
+              style={[
+                styles.buttons,
+                { backgroundColor: "rgb(83, 122, 247)", borderRadius: 30 },
+              ]}
               onPress={() => setPhotoUri(null)}
-            />
-            <Button
-              style={styles.buttons}
-              title="이미지 저장"
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                다시찍기
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.buttons,
+                { backgroundColor: "rgb(83, 122, 247)", borderRadius: 30 },
+              ]}
               onPress={savePicture}
-            />
-            <Button style={styles.buttons} title="다음" onPress={handleNext} />
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                이미지 저장
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.buttons,
+                { backgroundColor: "rgb(83, 122, 247)", borderRadius: 30 },
+              ]}
+              onPress={handleNext}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>다음</Text>
+            </TouchableOpacity>
           </View>
         </View>
       ) : (
@@ -164,7 +184,7 @@ const CameraTestScreen = () => {
             <Slider
               style={styles.slider}
               minimumValue={0}
-              maximumValue={1}
+              maximumValue={0.1}
               value={zoom}
               onValueChange={setZoom}
             />
@@ -234,10 +254,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttons: {
-    backgroundColor: "rgb(83, 122, 247)",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
+    color: "white",
+    fontWeight: "bold",
   },
   buttonContainer: {
     flex: 1,
@@ -266,8 +287,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    margin: 10,
-    marginBottom: 20,
+    marginBottom: 30,
   },
   shootingImage: {
     width: 40,

@@ -17,7 +17,9 @@ const TestHomeScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.instructions}>두피가 자세히 보이도록 사진을 찍어주세요!</Text>
+        <Text style={styles.instructions}>
+          두피가 자세히 보이도록 사진을 찍어주세요!
+        </Text>
         <TouchableOpacity style={styles.button} onPress={handleCamera}>
           <Text style={styles.buttonText}>두피 사진 촬영</Text>
         </TouchableOpacity>
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#ffffff",
   },
   content: {
     flex: 1,
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   button: {
-    backgroundColor: "rgb(107, 156, 255)",
+    backgroundColor: "rgb(83, 122, 247)",
     paddingVertical: 15,
     paddingHorizontal: 25,
     borderRadius: 8,

@@ -67,6 +67,9 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
+      <View>
+        <Text>서비스를 이용하시려면 로그인이 필요합니다!</Text>
+      </View>
       <TextInput
         style={styles.inputBox}
         value={email}
@@ -97,6 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
   inputBox: {
     width: "80%",
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "rgb(83, 122, 247)",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -117,6 +121,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

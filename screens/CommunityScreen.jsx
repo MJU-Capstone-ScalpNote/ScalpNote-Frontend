@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import axios from "axios";
 import CommunityHeader from "../components/CommunityHeader";
+import Footer from "../components/Footer";
 import { useNavigation } from "@react-navigation/native";
 
 const CommunityScreen = () => {
@@ -39,40 +47,52 @@ const CommunityScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <CommunityHeader />
-      {selectedPost ? (
-        <View style={styles.postDetailContainer}>
-          <TouchableOpacity onPress={() => setSelectedPost(null)}>
-            <Text style={styles.backButton}>＜ 뒤로가기</Text>
-          </TouchableOpacity>
-          <Text style={styles.postDetailTitle}>{selectedPost.title}</Text>
-          <Text style={styles.postDetailContent}>{selectedPost.content}</Text>
-          {selectedPost.imageUrl && (
-            <>
-              <Text>{selectedPost.imageUrl}</Text> {/* 이미지 URL 로그 출력 */}
-              <Image
-                source={{ uri: encodeURI(selectedPost.imageUrl) }} // URL 인코딩
-                style={styles.postDetailImage}
-                onError={(e) => console.error(e.nativeEvent.error)} // 이미지 로딩 에러 로그 출력
-              />
-            </>
-          )}
-          <Text style={styles.postDetailAuthor}>
-            {selectedPost.writer} · {new Date(selectedPost.createdAt).toLocaleString()}
-          </Text>
-        </View>
-      ) : (
-        <FlatList data={posts} renderItem={renderPost} keyExtractor={(item) => item.postId.toString()} />
-      )}
-      <TouchableOpacity style={styles.writeButton} onPress={() => navigation.navigate("WritePost")}>
-        <Image
-          source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/1828/1828911.png",
-          }}
-          style={styles.writeButtonImage}
-        />
-      </TouchableOpacity>
+    <View style={styles.CommunityContainer}>
+      <View style={styles.container}>
+        <CommunityHeader />
+        {selectedPost ? (
+          <View style={styles.postDetailContainer}>
+            <TouchableOpacity onPress={() => setSelectedPost(null)}>
+              <Text style={styles.backButton}>＜ 뒤로가기</Text>
+            </TouchableOpacity>
+            <Text style={styles.postDetailTitle}>{selectedPost.title}</Text>
+            <Text style={styles.postDetailContent}>{selectedPost.content}</Text>
+            {selectedPost.imageUrl && (
+              <>
+                <Text>{selectedPost.imageUrl}</Text>{" "}
+                {/* 이미지 URL 로그 출력 */}
+                <Image
+                  source={{ uri: encodeURI(selectedPost.imageUrl) }} // URL 인코딩
+                  style={styles.postDetailImage}
+                  onError={(e) => console.error(e.nativeEvent.error)} // 이미지 로딩 에러 로그 출력
+                />
+              </>
+            )}
+            <Text style={styles.postDetailAuthor}>
+              {selectedPost.writer} ·{" "}
+              {new Date(selectedPost.createdAt).toLocaleString()}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={posts}
+            renderItem={renderPost}
+            keyExtractor={(item) => item.postId.toString()}
+          />
+        )}
+        <TouchableOpacity
+          style={styles.writeButton}
+          onPress={() => navigation.navigate("WritePost")}
+        >
+          <Image
+            source={{
+              uri: "https://cdn-icons-png.flaticon.com/512/1828/1828911.png",
+            }}
+            style={styles.writeButtonImage}
+          />
+        </TouchableOpacity>
+      </View>
+      <Footer />
     </View>
   );
 };
@@ -80,6 +100,9 @@ const CommunityScreen = () => {
 export default CommunityScreen;
 
 const styles = StyleSheet.create({
+  CommunityContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: "white",
