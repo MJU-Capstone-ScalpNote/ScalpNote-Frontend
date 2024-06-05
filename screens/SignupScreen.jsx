@@ -28,7 +28,7 @@ const SignupScreen = () => {
   const handleSignUp = async () => {
     try {
       const response = await axios.post(
-        "http://13.209.76.135:8080/auth/sign-up",
+        "http://43.201.108.238:8080/auth/sign-up",
         {
           name,
           email,
@@ -111,7 +111,7 @@ const SignupScreen = () => {
       <TouchableOpacity
         style={[
           styles.button,
-          { backgroundColor: isFormValid ? "#007AFF" : "#aaa" },
+          { backgroundColor: isFormValid ? "rgb(83, 122, 247)" : "#aaa" },
         ]}
         onPress={handleSignUp}
         disabled={!isFormValid}
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+    fontWeight: "bold",
   },
   errorText: {
     color: "red",
