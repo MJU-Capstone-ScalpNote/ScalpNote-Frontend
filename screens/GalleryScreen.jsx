@@ -12,6 +12,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import Footer from "../components/Footer";
 
 const GalleryScreen = () => {
   const [photoUri, setPhotoUri] = useState(null);
@@ -99,101 +100,47 @@ const GalleryScreen = () => {
     }
   };
 
-  const navigateHome = () => {
-    navigation.navigate("Home");
-  };
-
   return (
-    <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <View style={styles.resultContainer}>
-          <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-            <Text style={styles.uploadButtonText}>사진 업로드</Text>
-          </TouchableOpacity>
-          {photoUri && (
-            <>
-              <Image source={{ uri: photoUri }} style={styles.image} />
-              <Text style={styles.diagnosisText}>진단 결과: {diagnosis}</Text>
-              <TouchableOpacity
-                style={styles.saveButton}
-                onPress={saveDiagnosis}
-              >
-                <Text style={styles.saveButtonText}>진단 결과 저장</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          <TouchableOpacity style={styles.homeButton} onPress={navigateHome}>
-            <Text style={styles.homeButtonText}>홈으로 돌아가기</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+    <View style={styles.wrapper}>
+      <View style={styles.container}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <View style={styles.resultContainer}>
+            <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+              <Text style={styles.uploadButtonText}>
+                사진 선택 후 진단 시작하기
+              </Text>
+            </TouchableOpacity>
+            {photoUri && (
+              <>
+                <Image source={{ uri: photoUri }} style={styles.image} />
+                <Text style={styles.diagnosisText}>진단 결과: {diagnosis}</Text>
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={saveDiagnosis}
+                >
+                  <Text style={styles.saveButtonText}>진단 결과 저장</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        )}
+      </View>
+      <Footer />
     </View>
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 10,
-//   },
-//   imageContainer: {
-//     flexDirection: "row",
-//     flexWrap: "wrap",
-//     justifyContent: "flex-start",
-//     alignItems: "center",
-//   },
-//   image: {
-//     width: "30%",
-//     height: 100,
-//     margin: 5,
-//   },
-//   modalOverlay: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "rgba(0, 0, 0, 0.5)",
-//   },
-//   modalContainer: {
-//     width: 300,
-//     padding: 20,
-//     backgroundColor: "white",
-//     borderRadius: 10,
-//     alignItems: "center",
-//   },
-//   modalText: {
-//     fontSize: 17,
-//     textAlign: "center",
-//     marginBottom: 40,
-//     fontWeight: "bold",
-//   },
-//   modalButtonContainer: {
-//     flexDirection: "row",
-//     width: "100%",
-//     justifyContent: "space-between",
-//   },
-//   modalButton: {
-//     backgroundColor: "rgb(83, 122, 247)",
-//     paddingVertical: 10,
-//     paddingHorizontal: 15,
-//     borderRadius: 5,
-//   },
-//   modalButtonText: {
-//     color: "white",
-//     fontSize: 13,
-//     fontWeight: "bold",
-//     textAlign: "center",
-//   },
-// });
-
 export default GalleryScreen;
 
 const styles = StyleSheet.create({
+  wrapper: { flex: 1 },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
   resultContainer: {
     alignItems: "center",
@@ -212,7 +159,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   saveButton: {
-    backgroundColor: "rgb(127, 170, 255)",
+    backgroundColor: "rgb(83, 122, 247)",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -225,7 +172,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   homeButton: {
-    backgroundColor: "rgb(127, 170, 255)",
+    backgroundColor: "rgb(83, 122, 247)",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -238,7 +185,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   uploadButton: {
-    backgroundColor: "rgb(127, 170, 255)",
+    backgroundColor: "rgb(83, 122, 247)",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
