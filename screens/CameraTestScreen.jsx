@@ -96,7 +96,7 @@ const CameraTestScreen = () => {
 
   const handleNext = () => {
     if (isPhotoSaved) {
-      navigation.navigate("Gallery");
+      navigation.navigate("Gallery", { photoUri });
     } else {
       Alert.alert(
         "방금 찍은 이미지를 저장하시겠습니까?",
@@ -106,12 +106,12 @@ const CameraTestScreen = () => {
             text: "저장",
             onPress: async () => {
               await savePicture();
-              navigation.navigate("Gallery");
+              navigation.navigate("Gallery", { photoUri });
             },
           },
           {
             text: "삭제",
-            onPress: () => navigation.navigate("Gallery"),
+            onPress: () => navigation.navigate("Gallery", { photoUri }),
             style: "destructive",
           },
         ],

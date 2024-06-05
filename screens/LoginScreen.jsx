@@ -36,7 +36,7 @@ const LoginScreen = () => {
       console.log("pw: ", password);
 
       const response = await axios.post(
-        "http://13.209.76.135:8080/auth/sign-in",
+        "http://43.201.108.238:8080/auth/sign-in",
         { email, password }
       );
 

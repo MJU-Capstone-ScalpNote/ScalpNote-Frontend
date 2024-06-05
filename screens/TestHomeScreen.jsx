@@ -9,6 +9,7 @@ const TestHomeScreen = () => {
   const handleCamera = () => {
     navigation.navigate("CameraTestScreen");
   };
+
   const handleGallery = () => {
     navigation.navigate("Gallery");
   };
@@ -16,9 +17,7 @@ const TestHomeScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.instructions}>
-          두피가 자세히 보이도록 사진을 찍어주세요!
-        </Text>
+        <Text style={styles.instructions}>두피가 자세히 보이도록 사진을 찍어주세요!</Text>
         <TouchableOpacity style={styles.button} onPress={handleCamera}>
           <Text style={styles.buttonText}>두피 사진 촬영</Text>
         </TouchableOpacity>

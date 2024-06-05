@@ -16,7 +16,7 @@ import Footer from "./components/Footer";
 import MyPage from "./screens/MyPage";
 import TestResultScreen from "./screens/TestResultScreen";
 import CameraTestScreen from "./screens/CameraTestScreen";
-import GalleryScreen from "./screens/GalleryScreen";
+import GalleryScreen from "./screens/GalleryScreen"; // GalleryScreen을 임포트합니다.
 import WritePostScreen from "./screens/WritePostScreen";
 
 const Stack = createStackNavigator();
@@ -44,70 +44,27 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <View>
+      <View style={styles.loadingContainer}>
         <Text>Loading...</Text>
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ title: "홈" }}
-          />
-
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ title: "로그인" }}
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignupScreen}
-            options={{ title: "회원가입" }}
-          />
-          <Stack.Screen
-            name="TestHomeScreen"
-            component={TestHomeScreen}
-            options={{ title: "두피진단" }}
-          />
-
-          <Stack.Screen
-            name="CameraTestScreen"
-            component={CameraTestScreen}
-            options={{ title: "카메라" }}
-          />
-          <Stack.Screen
-            name="Gallery"
-            component={GalleryScreen}
-            options={{ title: "갤러리" }}
-          />
-          <Stack.Screen
-            name="Community"
-            component={CommunityScreen}
-            options={{ title: "커뮤니티" }}
-          />
-          <Stack.Screen
-            name="WritePost"
-            component={WritePostScreen}
-            options={{ title: "글쓰기" }}
-          />
-          <Stack.Screen
-            name="TestResult"
-            component={TestResultScreen}
-            options={{ title: "진단내역" }}
-          />
+        <Stack.Navigator initialRouteName={userToken ? "Home" : "Login"}>
+          <Stack.Screen name="Home" component={HomeScreen} options={{ title: "홈" }} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ title: "로그인" }} />
+          <Stack.Screen name="SignUp" component={SignupScreen} options={{ title: "회원가입" }} />
+          <Stack.Screen name="TestHomeScreen" component={TestHomeScreen} options={{ title: "두피진단" }} />
+          <Stack.Screen name="CameraTestScreen" component={CameraTestScreen} options={{ title: "카메라" }} />
+          <Stack.Screen name="Gallery" component={GalleryScreen} options={{ title: "갤러리" }} />
+          <Stack.Screen name="Community" component={CommunityScreen} options={{ title: "커뮤니티" }} />
+          <Stack.Screen name="WritePost" component={WritePostScreen} options={{ title: "글쓰기" }} />
+          <Stack.Screen name="TestResult" component={TestResultScreen} options={{ title: "진단내역" }} />
           <Stack.Screen name="CommunityHeader" component={CommunityHeader} />
           <Stack.Screen name="MyPage" component={MyPage} />
-
-          {/* {userToken ? (
-            <Stack.Screen name="MyPage" component={MyPage} />
-          ) : (
-            <Stack.Screen name="Login" component={LoginScreen} />
-          )} */}
           <Stack.Screen name="Footer" component={Footer} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -120,5 +77,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
