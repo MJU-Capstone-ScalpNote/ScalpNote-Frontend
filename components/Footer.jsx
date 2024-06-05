@@ -78,6 +78,9 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 25,
     paddingBottom: 10,
+    paddingTop: 10,
+    borderTopStartRadius: 30,
+    borderTopEndRadius: 30,
   },
   footer: {
     backgroundColor: "black",
