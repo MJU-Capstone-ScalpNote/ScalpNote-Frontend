@@ -42,7 +42,7 @@ const GalleryScreen = () => {
   const uploadImage = async (uri) => {
     setLoading(true);
     const formData = new FormData();
-    const uriParts = uri.split('.');
+    const uriParts = uri.split(".");
     const fileType = uriParts[uriParts.length - 1];
 
     formData.append("file", {
@@ -52,11 +52,15 @@ const GalleryScreen = () => {
     });
 
     try {
-      const response = await axios.post("http://52.78.154.226:8000/predict", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://52.78.154.226:8000/predict",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       const predictionResult = response.data.prediction[0];
       setPrediction(predictionResult);
       determineDiagnosis(predictionResult);
@@ -112,7 +116,10 @@ const GalleryScreen = () => {
             <>
               <Image source={{ uri: photoUri }} style={styles.image} />
               <Text style={styles.diagnosisText}>진단 결과: {diagnosis}</Text>
-              <TouchableOpacity style={styles.saveButton} onPress={saveDiagnosis}>
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={saveDiagnosis}
+              >
                 <Text style={styles.saveButtonText}>진단 결과 저장</Text>
               </TouchableOpacity>
             </>
@@ -125,6 +132,60 @@ const GalleryScreen = () => {
     </View>
   );
 };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 10,
+//   },
+//   imageContainer: {
+//     flexDirection: "row",
+//     flexWrap: "wrap",
+//     justifyContent: "flex-start",
+//     alignItems: "center",
+//   },
+//   image: {
+//     width: "30%",
+//     height: 100,
+//     margin: 5,
+//   },
+//   modalOverlay: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//     backgroundColor: "rgba(0, 0, 0, 0.5)",
+//   },
+//   modalContainer: {
+//     width: 300,
+//     padding: 20,
+//     backgroundColor: "white",
+//     borderRadius: 10,
+//     alignItems: "center",
+//   },
+//   modalText: {
+//     fontSize: 17,
+//     textAlign: "center",
+//     marginBottom: 40,
+//     fontWeight: "bold",
+//   },
+//   modalButtonContainer: {
+//     flexDirection: "row",
+//     width: "100%",
+//     justifyContent: "space-between",
+//   },
+//   modalButton: {
+//     backgroundColor: "rgb(83, 122, 247)",
+//     paddingVertical: 10,
+//     paddingHorizontal: 15,
+//     borderRadius: 5,
+//   },
+//   modalButtonText: {
+//     color: "white",
+//     fontSize: 13,
+//     fontWeight: "bold",
+//     textAlign: "center",
+//   },
+// });
 
 export default GalleryScreen;
 

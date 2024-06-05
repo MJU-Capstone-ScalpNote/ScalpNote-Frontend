@@ -127,16 +127,16 @@ const CameraTestScreen = () => {
           <Image source={{ uri: photoUri }} style={styles.preview} />
           <View style={styles.buttonRow}>
             <Button
-              style={styles.button}
+              style={styles.buttons}
               title="다시찍기"
               onPress={() => setPhotoUri(null)}
             />
             <Button
-              style={styles.button}
+              style={styles.buttons}
               title="이미지 저장"
               onPress={savePicture}
             />
-            <Button style={styles.button} title="다음" onPress={handleNext} />
+            <Button style={styles.buttons} title="다음" onPress={handleNext} />
           </View>
         </View>
       ) : (
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   permissionButton: {
-    backgroundColor: "rgb(127, 170, 255)",
+    backgroundColor: "rgb(83, 122, 247)",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -231,10 +231,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    marginTop: 10,
+    marginTop: 20,
   },
-  button: {
-    backgroundColor: "yellow",
+  buttons: {
+    backgroundColor: "rgb(83, 122, 247)",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
   },
   buttonContainer: {
     flex: 1,

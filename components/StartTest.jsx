@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   testButton: {
-    backgroundColor: "rgb(107, 156, 255)",
+    backgroundColor: "rgb(83, 122, 247)",
     padding: 15,
     paddingBottom: 20,
     borderRadius: 12,
