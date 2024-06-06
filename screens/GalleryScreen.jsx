@@ -107,11 +107,13 @@ const GalleryScreen = () => {
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           <View style={styles.resultContainer}>
-            <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-              <Text style={styles.uploadButtonText}>
-                사진 선택 후 진단 시작하기
-              </Text>
-            </TouchableOpacity>
+            {!photoUri && (
+              <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+                <Text style={styles.uploadButtonText}>
+                  사진 선택 후 진단 시작하기
+                </Text>
+              </TouchableOpacity>
+            )}
             {photoUri && (
               <>
                 <Image source={{ uri: photoUri }} style={styles.image} />
