@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Button, Alert, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  ScrollView,
+  RefreshControl,
+  Image,
+} from "react-native";
 import axios from "axios";
 
 const Results = () => {
   const [diagnosisHistory, setDiagnosisHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadDiagnosisHistory();
@@ -13,7 +22,9 @@ const Results = () => {
   const loadDiagnosisHistory = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://43.201.108.238:8080/users/model6/history");
+      const response = await axios.get(
+        "http://43.201.108.238:8080/users/model6/history"
+      );
       console.log("Response status:", response.status);
       console.log("Response data:", response.data);
 
@@ -23,31 +34,60 @@ const Results = () => {
         Alert.alert("Error", "Failed to fetch diagnosis history");
       }
     } catch (error) {
-      console.error("Error fetching diagnosis history:", error.response ? error.response.data : error.message);
+      console.error(
+        "Error fetching diagnosis history:",
+        error.response ? error.response.data : error.message
+      );
       Alert.alert("Error", "Failed to fetch diagnosis history");
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    loadDiagnosisHistory();
   };
 
   return (
     <View style={styles.container}>
-      <Button title="진단 내역 갱신" onPress={loadDiagnosisHistory} />
       <View style={styles.resultTitle}>
-        <Text style={styles.Title}>나의 진단내역</Text>
+        <Text style={styles.title}>나의 진단내역</Text>
       </View>
       {loading ? (
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       ) : diagnosisHistory.length > 0 ? (
-        <ScrollView style={styles.scrollView}>
+        <ScrollView
+          style={styles.scrollView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           {diagnosisHistory.map((result) => (
             <View key={result.id} style={styles.diagnosisContainer}>
-              <TouchableOpacity style={styles.diagnosis}>
-                <Text style={styles.diagnosisText}>{new Date(result.createdAt).toLocaleDateString()}</Text>
-                <Text style={styles.diagnosisText}>탈모 {result.scalpCondition}단계</Text>
-              </TouchableOpacity>
+              <View style={styles.diagnosis}>
+                <View style={styles.diagnosisDate}>
+                  <Image
+                    source={require("../assets/images/calendar.png")}
+                    style={styles.icon}
+                  />
+                  <Text style={styles.diagnosisText}>
+                    {new Date(result.createdAt).toLocaleDateString()}
+                  </Text>
+                </View>
+                <View style={styles.diagnosisStage}>
+                  <Image
+                    source={require("../assets/images/character.png")}
+                    style={styles.icon}
+                  />
+                  <Text style={styles.diagnosisText}>
+                    탈모 {result.scalpCondition}단계
+                  </Text>
+                </View>
+              </View>
             </View>
           ))}
         </ScrollView>
@@ -65,33 +105,56 @@ export default Results;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "flex-start",
-    backgroundColor: "white",
+    backgroundColor: "#f4f6f8",
     padding: 16,
+    borderRadius: 10,
   },
   scrollView: {
-    width: '100%',
+    width: "100%",
   },
   resultTitle: {
-    marginBottom: 15,
+    marginTop: 15,
+    marginBottom: 30,
   },
-  Title: {
-    fontSize: 20,
-    fontWeight: "bold",
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#343a40",
   },
   diagnosisContainer: {
-    padding: 10,
-    borderColor: "gray",
-    borderWidth: 1,
-    width: "100%",
-    marginBottom: 10,
+    padding: 15,
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4.65,
+    elevation: 8,
+    marginBottom: 15,
   },
   diagnosis: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  diagnosisDate: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  diagnosisStage: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginRight: 8,
+  },
   diagnosisText: {
     fontSize: 18,
+    color: "#495057",
   },
   noResultsContainer: {
     flex: 1,

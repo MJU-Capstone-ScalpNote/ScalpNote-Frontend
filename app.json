@@ -2,18 +2,17 @@
   "expo": {
     "name": "ScalpyNote",
     "slug": "ScalpyNote",
+    "owner": "rindeo423",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

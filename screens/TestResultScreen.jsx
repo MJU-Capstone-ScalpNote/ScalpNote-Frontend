@@ -16,7 +16,6 @@ const TestResultScreen = () => {
     <View style={styles.container}>
       <View style={styles.resultContainer}>
         <Results />
-        <StartTest />
       </View>
 
       <Footer />

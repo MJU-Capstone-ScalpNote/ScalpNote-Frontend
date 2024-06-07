@@ -42,9 +42,9 @@ const CommunityScreen = () => {
       const response = await axios.get(
         `http://43.201.108.238:8080/boards/${postId}/simple-boards`
       );
-      console.log(response.data.data); // 데이터 구조 확인을 위해 로그 추가
+      console.log(response.data.data);
       setSelectedPost(response.data.data);
-      setComments(response.data.data.commentResList); // 응답에 댓글이 포함되어 있다고 가정
+      setComments(response.data.data.commentResList);
     } catch (error) {
       console.error("Error fetching post details", error);
     }
@@ -57,7 +57,7 @@ const CommunityScreen = () => {
       const response = await axios.post(
         `http://43.201.108.238:8080/boards/comment/${selectedPost.postId}`,
         {
-          userId: 1, // 사용자 ID (하드코딩되어 있습니다. 실제로는 인증된 사용자 ID를 사용하세요)
+          userId: 1,
           content: newComment,
           parentId: replyTo,
         }
@@ -65,7 +65,6 @@ const CommunityScreen = () => {
 
       console.log("Comment posted:", response.data);
 
-      // 댓글을 다시 불러와서 상태 업데이트
       fetchPostDetails(selectedPost.postId);
       setNewComment("");
       setReplyTo(null);
@@ -109,74 +108,82 @@ const CommunityScreen = () => {
   return (
     <View style={styles.container}>
       <CommunityHeader />
-      {selectedPost ? (
-        <View style={styles.postDetailContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedPost(null);
-              setComments([]);
-            }}
-          >
-            <Text style={styles.backButton}>＜ 뒤로가기</Text>
-          </TouchableOpacity>
-          <Text style={styles.postDetailTitle}>{selectedPost.title}</Text>
-          <Text style={styles.postDetailContent}>{selectedPost.content}</Text>
-          {selectedPost.imageUrl && (
-            <Image
-              source={{ uri: encodeURI(selectedPost.imageUrl) }} // URL 인코딩
-              style={styles.postDetailImage}
-              onError={(e) =>
-                console.error("Image loading error: ", e.nativeEvent.error)
-              } // 이미지 로딩 에러 로그 출력
-            />
-          )}
-          <Text style={styles.postDetailAuthor}>
-            {selectedPost.writer} ·{" "}
-            {new Date(selectedPost.createdAt).toLocaleString()}
-          </Text>
-          <FlatList
-            data={comments}
-            renderItem={renderComment}
-            keyExtractor={(item) => item.id.toString()}
-            style={styles.commentsList}
-          />
-          <View style={styles.commentInputContainer}>
-            {replyTo && (
-              <Text style={styles.replyingToText}>
-                답글 대상:{" "}
-                {
-                  comments.find((comment) => comment.id === replyTo)?.writer
-                    ?.name
+      <View style={styles.content}>
+        {selectedPost ? (
+          <View style={styles.postDetailContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                setSelectedPost(null);
+                setComments([]);
+              }}
+              style={styles.backButtonContainer}
+            >
+              <Text style={styles.backButton}>＜ 돌아가기</Text>
+            </TouchableOpacity>
+            <Text style={styles.postDetailTitle}>{selectedPost.title}</Text>
+            <Text style={styles.postDetailContent}>{selectedPost.content}</Text>
+            {selectedPost.imageUrl && (
+              <Image
+                source={{ uri: encodeURI(selectedPost.imageUrl) }}
+                style={styles.postDetailImage}
+                onError={(e) =>
+                  console.error("Image loading error: ", e.nativeEvent.error)
                 }
-              </Text>
+              />
             )}
-            <TextInput
-              style={styles.commentInput}
-              placeholder="댓글을 입력하세요"
-              value={newComment}
-              onChangeText={setNewComment}
+            <Text style={styles.postDetailAuthor}>
+              {selectedPost.writer} ·{" "}
+              {new Date(selectedPost.createdAt).toLocaleString()}
+            </Text>
+            <FlatList
+              data={comments}
+              renderItem={renderComment}
+              keyExtractor={(item) => item.id.toString()}
+              style={styles.commentsList}
             />
-            <Button title="작성" onPress={postComment} />
+            <View style={styles.commentInputContainer}>
+              {replyTo && (
+                <Text style={styles.replyingToText}>
+                  답글 대상:{" "}
+                  {
+                    comments.find((comment) => comment.id === replyTo)?.writer
+                      ?.name
+                  }
+                </Text>
+              )}
+              <TextInput
+                style={styles.commentInput}
+                placeholder="댓글을 입력하세요"
+                value={newComment}
+                onChangeText={setNewComment}
+              />
+              <TouchableOpacity style={styles.postButton} onPress={postComment}>
+                <Text style={styles.postButtonText}>작성</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      ) : (
-        <FlatList
-          data={posts}
-          renderItem={renderPost}
-          keyExtractor={(item) => item.postId.toString()}
-        />
-      )}
-      <TouchableOpacity
-        style={styles.writeButton}
-        onPress={() => navigation.navigate("WritePost")}
-      >
-        <Image
-          source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/1828/1828911.png",
-          }}
-          style={styles.writeButtonImage}
-        />
-      </TouchableOpacity>
+        ) : (
+          <FlatList
+            data={posts}
+            renderItem={renderPost}
+            keyExtractor={(item) => item.postId.toString()}
+          />
+        )}
+        {!selectedPost && (
+          <TouchableOpacity
+            style={styles.writeButton}
+            onPress={() => navigation.navigate("WritePost")}
+          >
+            <Image
+              source={{
+                uri: "https://cdn-icons-png.flaticon.com/512/1828/1828911.png",
+              }}
+              style={styles.writeButtonImage}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
+      <Footer />
     </View>
   );
 };
@@ -184,12 +191,13 @@ const CommunityScreen = () => {
 export default CommunityScreen;
 
 const styles = StyleSheet.create({
-  CommunityContainer: {
-    flex: 1,
-  },
   container: {
     flex: 1,
     backgroundColor: "white",
+  },
+  content: {
+    flex: 1,
+    paddingBottom: 10,
   },
   postContainer: {
     padding: 15,
@@ -199,10 +207,11 @@ const styles = StyleSheet.create({
   postTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#333",
   },
   postContent: {
     fontSize: 14,
-    color: "#555",
+    color: "#666",
     marginVertical: 5,
   },
   postFooter: {
@@ -211,20 +220,27 @@ const styles = StyleSheet.create({
   },
   postAuthor: {
     fontSize: 12,
-    color: "#888",
+    color: "#999",
   },
   postDetailContainer: {
     flex: 1,
     padding: 15,
+    paddingTop: 0,
+    borderRadius: 10,
+  },
+  backButtonContainer: {
+    alignSelf: "flex-start",
+    paddingBottom: 10,
   },
   backButton: {
     fontSize: 16,
-    color: "#007BFF",
-    marginBottom: 15,
+    color: "rgb(83, 122, 247)",
   },
   postDetailTitle: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
   },
   postDetailContent: {
     fontSize: 16,
@@ -233,18 +249,20 @@ const styles = StyleSheet.create({
   },
   postDetailAuthor: {
     fontSize: 14,
-    color: "#888",
+    color: "#999",
+    marginBottom: 10,
   },
   postDetailImage: {
     width: "100%",
     height: 200,
     resizeMode: "contain",
     marginVertical: 10,
+    borderRadius: 10,
   },
   writeButton: {
     position: "absolute",
     right: 20,
-    bottom: 90, // Adjusted to avoid overlap
+    bottom: 90,
     width: 60,
     height: 60,
     borderRadius: 30,
@@ -265,15 +283,17 @@ const styles = StyleSheet.create({
   },
   commentContainer: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
   },
   commentAuthor: {
-    fontSize: 14,
+    borderTopColor: "#555",
+    borderTopWidth: 1,
+    paddingTop: 10,
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#333",
   },
   commentContent: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#555",
     marginTop: 5,
   },
@@ -281,7 +301,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 10,
-    paddingBottom: 30, // Adjusted to avoid overlap
   },
   commentInput: {
     flex: 1,
@@ -292,12 +311,24 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   replyingToText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#888",
     marginBottom: 5,
   },
   replyButton: {
     color: "#007BFF",
     marginTop: 5,
+  },
+  postButton: {
+    backgroundColor: "rgb(83, 122, 247)",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  postButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
