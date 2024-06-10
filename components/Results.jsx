@@ -29,7 +29,10 @@ const Results = () => {
       console.log("Response data:", response.data);
 
       if (response.status === 200) {
-        setDiagnosisHistory(response.data.data);
+        const sortedData = response.data.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setDiagnosisHistory(sortedData);
       } else {
         Alert.alert("Error", "Failed to fetch diagnosis history");
       }
@@ -75,7 +78,11 @@ const Results = () => {
                     style={styles.icon}
                   />
                   <Text style={styles.diagnosisText}>
-                    {new Date(result.createdAt).toLocaleDateString()}
+                    {new Date(result.createdAt).toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </Text>
                 </View>
                 <View style={styles.diagnosisStage}>
