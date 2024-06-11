@@ -19,6 +19,7 @@ import CameraTestScreen from "./screens/CameraTestScreen";
 import GalleryScreen from "./screens/GalleryScreen";
 import WritePostScreen from "./screens/WritePostScreen";
 import CameraGuideScreen from "./screens/CameraGuideScreen";
+import SelfDiagnosisScreen from "./screens/SelfDiagnosisScreen";
 
 const Stack = createStackNavigator();
 
@@ -104,6 +105,11 @@ export default function App() {
             name="TestResult"
             component={TestResultScreen}
             options={{ title: "진단내역" }}
+          />
+          <Stack.Screen
+            name="SelfDiagnosis"
+            component={SelfDiagnosisScreen}
+            options={{ title: "자가진단" }}
           />
           <Stack.Screen name="CommunityHeader" component={CommunityHeader} />
           <Stack.Screen name="MyPage" component={MyPage} />
