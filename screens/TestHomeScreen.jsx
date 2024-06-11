@@ -1,10 +1,12 @@
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Footer from "../components/Footer";
+import SelfDiagnosisModal from "../components/SelfDiagnosisModal";
 
 const TestHomeScreen = () => {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(true);
 
   const handleCamera = () => {
     navigation.navigate("CameraTestScreen");
@@ -18,8 +20,26 @@ const TestHomeScreen = () => {
     navigation.navigate("CameraGuide");
   };
 
+  const handleSelfDiagnosis = () => {
+    navigation.navigate("SelfDiagnosis");
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleNavigateToSelfDiagnosis = () => {
+    setModalVisible(false);
+    navigation.navigate("SelfDiagnosis");
+  };
+
   return (
     <View style={styles.container}>
+      <SelfDiagnosisModal
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        onNavigate={handleNavigateToSelfDiagnosis}
+      />
       <View style={styles.header}>
         <Text style={styles.instructions}>
           두피가 자세히 보이도록 {"\n"}사진을 찍어주세요!
@@ -37,6 +57,21 @@ const TestHomeScreen = () => {
           <Text style={styles.guideTitle}>두피 촬영 가이드</Text>
           <Text style={styles.guideButtonText}>
             정확한 진단을 위해{"\n"}가이드를 먼저 읽어주세요!
+          </Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.guideContainer}
+        onPress={handleSelfDiagnosis}
+      >
+        <Image
+          source={require("../assets/images/checkScalp.png")}
+          style={styles.guideImage}
+        />
+        <View style={styles.guideContent}>
+          <Text style={styles.guideTitle}>두피 자가진단 해보기</Text>
+          <Text style={styles.guideButtonText}>
+            자가진단 테스트를 통해{"\n"}두피 상태를 확인해보세요!
           </Text>
         </View>
       </TouchableOpacity>
